@@ -6,6 +6,7 @@ function DonorPage() {
   const [formData, setFormData] = useState({
     name: '', donorType: 'DECEASED', bloodGroup: 'A+', age: '', hospital: ''
   });
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const fetchDonors = async () => {
     try {
@@ -29,22 +30,24 @@ function DonorPage() {
   return (
     <div>
       <h2>Manage Donors</h2>
-      <div className="card mb-2">
-        <h3>Add New Donor</h3>
-        <form onSubmit={handleAdd} className="flex gap-1" style={{ flexWrap: 'wrap', marginTop: '1rem' }}>
-          <input type="text" placeholder="Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required style={{width: '200px'}} />
-          <select value={formData.donorType} onChange={e => setFormData({...formData, donorType: e.target.value})} style={{width: '150px'}}>
-            <option value="LIVING">Living</option>
-            <option value="DECEASED">Deceased</option>
-          </select>
-          <select value={formData.bloodGroup} onChange={e => setFormData({...formData, bloodGroup: e.target.value})} style={{width: '100px'}}>
-            {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
-          </select>
-          <input type="number" placeholder="Age" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} required style={{width: '100px'}} />
-          <input type="text" placeholder="Hospital" value={formData.hospital} onChange={e => setFormData({...formData, hospital: e.target.value})} required style={{width: '200px'}} />
-          <button type="submit" className="btn">Add Donor</button>
-        </form>
-      </div>
+      {(user?.role === 'ADMIN' || user?.role === 'COORDINATOR') && (
+        <div className="card mb-2">
+          <h3>Add New Donor</h3>
+          <form onSubmit={handleAdd} className="flex gap-1" style={{ flexWrap: 'wrap', marginTop: '1rem' }}>
+            <input type="text" placeholder="Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required style={{width: '200px'}} />
+            <select value={formData.donorType} onChange={e => setFormData({...formData, donorType: e.target.value})} style={{width: '150px'}}>
+              <option value="LIVING">Living</option>
+              <option value="DECEASED">Deceased</option>
+            </select>
+            <select value={formData.bloodGroup} onChange={e => setFormData({...formData, bloodGroup: e.target.value})} style={{width: '100px'}}>
+              {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
+            </select>
+            <input type="number" placeholder="Age" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} required style={{width: '100px'}} />
+            <input type="text" placeholder="Hospital" value={formData.hospital} onChange={e => setFormData({...formData, hospital: e.target.value})} required style={{width: '200px'}} />
+            <button type="submit" className="btn">Add Donor</button>
+          </form>
+        </div>
+      )}
 
       <div className="card">
         <h3>Registered Donors</h3>
