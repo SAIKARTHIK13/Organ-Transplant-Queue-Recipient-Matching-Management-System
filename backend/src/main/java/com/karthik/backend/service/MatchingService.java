@@ -45,6 +45,12 @@ public class MatchingService {
                     return true;
                 })
                 .sorted((r1, r2) -> {
+                    boolean r1Critical = "Critical".equalsIgnoreCase(r1.getMedicalCondition());
+                    boolean r2Critical = "Critical".equalsIgnoreCase(r2.getMedicalCondition());
+                    
+                    if (r1Critical && !r2Critical) return -1;
+                    if (!r1Critical && r2Critical) return 1;
+
                     // Sort by urgency score descending
                     int urgencyCompare = Integer.compare(r2.getUrgencyScore(), r1.getUrgencyScore());
                     if (urgencyCompare != 0) return urgencyCompare;

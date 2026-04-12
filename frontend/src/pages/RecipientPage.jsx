@@ -4,7 +4,7 @@ import { apiCall } from '../api';
 function RecipientPage() {
   const [recipients, setRecipients] = useState([]);
   const [formData, setFormData] = useState({
-    name: '', age: '', bloodGroup: 'A+', organNeeded: 'KIDNEY', urgencyScore: 5, tissueType: 'No'
+    name: '', age: '', bloodGroup: 'A+', organNeeded: 'KIDNEY', urgencyScore: 5, tissueType: 'No', registrationNumber: '', medicalCondition: 'Stable'
   });
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -25,6 +25,9 @@ function RecipientPage() {
     e.preventDefault();
     await apiCall('/recipients', { method: 'POST', body: formData });
     fetchRecipients();
+    setFormData({
+      name: '', age: '', bloodGroup: 'A+', organNeeded: 'KIDNEY', urgencyScore: 5, tissueType: 'No', registrationNumber: '', medicalCondition: 'Stable'
+    });
   };
 
   const handleUpdateUrgency = async (id, currentUrgency) => {
@@ -52,9 +55,10 @@ function RecipientPage() {
         <div className="card mb-2">
           <h3>Add New Recipient</h3>
           <form onSubmit={handleAdd} className="flex gap-1" style={{ flexWrap: 'wrap', marginTop: '1rem' }}>
-            <input type="text" placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required style={{ width: '200px' }} />
-            <input type="number" placeholder="Age" value={formData.age} onChange={e => setFormData({ ...formData, age: e.target.value })} required style={{ width: '100px' }} />
-            <select value={formData.bloodGroup} onChange={e => setFormData({ ...formData, bloodGroup: e.target.value })} style={{ width: '100px' }}>
+            <input type="text" placeholder="Reg Number" value={formData.registrationNumber} onChange={e => setFormData({ ...formData, registrationNumber: e.target.value })} required style={{ width: '120px' }} />
+            <input type="text" placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required style={{ width: '180px' }} />
+            <input type="number" placeholder="Age" value={formData.age} onChange={e => setFormData({ ...formData, age: e.target.value })} required style={{ width: '80px' }} />
+            <select value={formData.bloodGroup} onChange={e => setFormData({ ...formData, bloodGroup: e.target.value })} style={{ width: '80px' }}>
               {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
             </select>
             <select value={formData.organNeeded} onChange={e => setFormData({ ...formData, organNeeded: e.target.value })} style={{ width: '150px' }}>
@@ -65,9 +69,14 @@ function RecipientPage() {
               <option value="PANCREAS">Pancreas</option>
               <option value="CORNEA">Cornea</option>
             </select>
-            <select value={formData.tissueType} onChange={e => setFormData({ ...formData, tissueType: e.target.value })} style={{ width: '120px' }}>
+            <select value={formData.tissueType} onChange={e => setFormData({ ...formData, tissueType: e.target.value })} style={{ width: '100px' }}>
               <option value="Yes">HLA: Yes</option>
               <option value="No">HLA: No</option>
+            </select>
+            <select value={formData.medicalCondition} onChange={e => setFormData({ ...formData, medicalCondition: e.target.value })} style={{ width: '120px' }}>
+              <option value="Stable">Stable</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Critical">Critical</option>
             </select>
             <input type="number" min="1" max="10" placeholder="Urgency (1-10)" value={formData.urgencyScore} onChange={e => setFormData({ ...formData, urgencyScore: e.target.value })} required style={{ width: '120px' }} />
             <button type="submit" className="btn">Add Recipient</button>
@@ -81,6 +90,7 @@ function RecipientPage() {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Reg No</th>
               <th>Name</th>
               <th>Organ Needed</th>
               <th>Blood Grp</th>
@@ -93,6 +103,7 @@ function RecipientPage() {
             {recipients.map(r => (
               <tr key={r.id}>
                 <td>{r.id}</td>
+                <td>{r.registrationNumber}</td>
                 <td>{r.name}</td>
                 <td>{r.organNeeded}</td>
                 <td>{r.bloodGroup}</td>

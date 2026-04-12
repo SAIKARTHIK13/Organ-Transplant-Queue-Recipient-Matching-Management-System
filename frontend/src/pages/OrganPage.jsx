@@ -27,6 +27,9 @@ function OrganPage() {
     e.preventDefault();
     await apiCall('/organs', { method: 'POST', body: formData });
     fetchOrgans();
+    setFormData({
+      donorId: '', organType: 'KIDNEY', bloodGroup: 'A+', tissueType: 'No'
+    });
   };
 
   return (

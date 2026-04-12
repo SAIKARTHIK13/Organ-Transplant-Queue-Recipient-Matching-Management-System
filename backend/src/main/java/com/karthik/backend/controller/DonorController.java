@@ -24,4 +24,15 @@ public class DonorController {
     public ResponseEntity<List<Donor>> getAllDonors() {
         return ResponseEntity.ok(donorService.getAllDonors());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Donor> updateDonor(@PathVariable Long id, @RequestBody Donor donor) {
+        return ResponseEntity.ok(donorService.updateDonor(id, donor));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDonor(@PathVariable Long id) {
+        donorService.deleteDonor(id);
+        return ResponseEntity.ok().build();
+    }
 }

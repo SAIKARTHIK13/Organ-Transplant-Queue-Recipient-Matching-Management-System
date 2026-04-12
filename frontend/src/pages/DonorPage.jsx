@@ -29,6 +29,27 @@ function DonorPage() {
     }
     await apiCall('/donors', { method: 'POST', body: formData });
     fetchDonors();
+    setFormData({
+      name: '', donorType: 'DECEASED', bloodGroup: 'A+', age: '', hospital: '', tissueType: 'No', causeOfDeath: ''
+    });
+  };
+
+  const handleUpdateHospital = async (id, currentHospital) => {
+    const newHospital = prompt('Enter new hospital:', currentHospital);
+    if (newHospital) {
+      await apiCall(`/donors/${id}`, {
+        method: 'PUT',
+        body: { hospital: newHospital }
+      });
+      fetchDonors();
+    }
+  };
+
+  const handleRemove = async (id) => {
+    if (window.confirm('Are you sure you want to remove this donor?')) {
+      await apiCall(`/donors/${id}`, { method: 'DELETE' });
+      fetchDonors();
+    }
   };
 
   return (
@@ -70,6 +91,7 @@ function DonorPage() {
               <th>Type</th>
               <th>Blood Grp</th>
               <th>Hospital</th>
+              {(user?.role === 'ADMIN' || user?.role === 'COORDINATOR') && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -80,6 +102,12 @@ function DonorPage() {
                 <td>{d.donorType}</td>
                 <td>{d.bloodGroup}</td>
                 <td>{d.hospital}</td>
+                {(user?.role === 'ADMIN' || user?.role === 'COORDINATOR') && (
+                  <td className="flex gap-1">
+                    <button className="btn" onClick={() => handleUpdateHospital(d.id, d.hospital)}>Update</button>
+                    <button className="btn btn-danger" onClick={() => handleRemove(d.id)}>Remove</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

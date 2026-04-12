@@ -23,4 +23,20 @@ public class DonorService {
     public List<Donor> getAllDonors() {
         return donorRepository.findAll();
     }
+
+    public Donor updateDonor(Long id, Donor updatedDonor) {
+        Donor donor = donorRepository.findById(id).orElseThrow(() -> new RuntimeException("Donor not found"));
+        if (updatedDonor.getName() != null) donor.setName(updatedDonor.getName());
+        if (updatedDonor.getDonorType() != null) donor.setDonorType(updatedDonor.getDonorType());
+        if (updatedDonor.getBloodGroup() != null) donor.setBloodGroup(updatedDonor.getBloodGroup());
+        if (updatedDonor.getTissueType() != null) donor.setTissueType(updatedDonor.getTissueType());
+        if (updatedDonor.getAge() != null) donor.setAge(updatedDonor.getAge());
+        if (updatedDonor.getCauseOfDeath() != null) donor.setCauseOfDeath(updatedDonor.getCauseOfDeath());
+        if (updatedDonor.getHospital() != null) donor.setHospital(updatedDonor.getHospital());
+        return donorRepository.save(donor);
+    }
+
+    public void deleteDonor(Long id) {
+        donorRepository.deleteById(id);
+    }
 }

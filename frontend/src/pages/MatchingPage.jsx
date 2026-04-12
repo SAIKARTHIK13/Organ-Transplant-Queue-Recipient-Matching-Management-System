@@ -42,6 +42,12 @@ function MatchingPage() {
     }
   };
 
+  const handleRejectOrgan = (recipientId) => {
+    if (window.confirm('Are you sure you want to reject this patient for this organ?')) {
+      setMatches(matches.filter(m => m.id !== recipientId));
+    }
+  };
+
   return (
     <div>
       <h2>Matching Results for Organ #{organId}</h2>
@@ -69,9 +75,14 @@ function MatchingPage() {
                   <td><strong>{m.urgencyScore} / 10</strong></td>
                   <td>{m.waitingSince}</td>
                   <td>
-                    <button className="btn btn-success" onClick={() => handleAcceptOrgan(m.id)}>
-                      Allocate to Patient
-                    </button>
+                    <div className="flex gap-1">
+                      <button className="btn btn-success" onClick={() => handleAcceptOrgan(m.id)}>
+                        Allocate
+                      </button>
+                      <button className="btn btn-danger" onClick={() => handleRejectOrgan(m.id)}>
+                        Reject
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
