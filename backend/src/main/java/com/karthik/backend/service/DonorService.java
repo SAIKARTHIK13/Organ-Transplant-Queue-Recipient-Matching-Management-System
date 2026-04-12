@@ -14,6 +14,9 @@ public class DonorService {
     private DonorRepository donorRepository;
 
     public Donor addDonor(Donor donor) {
+        if ("LIVING".equalsIgnoreCase(donor.getDonorType()) && donor.getAge() != null && donor.getAge() < 18) {
+            throw new RuntimeException("Living donor must be at least 18 years old.");
+        }
         return donorRepository.save(donor);
     }
 

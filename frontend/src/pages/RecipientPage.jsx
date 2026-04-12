@@ -4,7 +4,7 @@ import { apiCall } from '../api';
 function RecipientPage() {
   const [recipients, setRecipients] = useState([]);
   const [formData, setFormData] = useState({
-    name: '', age: '', bloodGroup: 'A+', organNeeded: 'KIDNEY', urgencyScore: 5
+    name: '', age: '', bloodGroup: 'A+', organNeeded: 'KIDNEY', urgencyScore: 5, tissueType: 'No'
   });
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -64,6 +64,10 @@ function RecipientPage() {
               <option value="LUNG">Lung</option>
               <option value="PANCREAS">Pancreas</option>
               <option value="CORNEA">Cornea</option>
+            </select>
+            <select value={formData.tissueType} onChange={e => setFormData({ ...formData, tissueType: e.target.value })} style={{ width: '120px' }}>
+              <option value="Yes">HLA: Yes</option>
+              <option value="No">HLA: No</option>
             </select>
             <input type="number" min="1" max="10" placeholder="Urgency (1-10)" value={formData.urgencyScore} onChange={e => setFormData({ ...formData, urgencyScore: e.target.value })} required style={{ width: '120px' }} />
             <button type="submit" className="btn">Add Recipient</button>

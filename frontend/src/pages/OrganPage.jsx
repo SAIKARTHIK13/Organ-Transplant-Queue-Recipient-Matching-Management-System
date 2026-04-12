@@ -5,7 +5,7 @@ import { apiCall } from '../api';
 function OrganPage() {
   const [organs, setOrgans] = useState([]);
   const [formData, setFormData] = useState({
-    donorId: '', organType: 'KIDNEY', bloodGroup: 'A+'
+    donorId: '', organType: 'KIDNEY', bloodGroup: 'A+', tissueType: 'No'
   });
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
@@ -48,6 +48,10 @@ function OrganPage() {
             <select value={formData.bloodGroup} onChange={e => setFormData({ ...formData, bloodGroup: e.target.value })} style={{ width: '150px' }}>
               {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
             </select>
+            <select value={formData.tissueType} onChange={e => setFormData({ ...formData, tissueType: e.target.value })} style={{ width: '120px' }}>
+              <option value="Yes">HLA: Yes</option>
+              <option value="No">HLA: No</option>
+            </select>
             <button type="submit" className="btn">Add Organ</button>
           </form>
         </div>
@@ -63,7 +67,7 @@ function OrganPage() {
               <th>Organ Type</th>
               <th>Blood Grp</th>
               <th>Status</th>
-              <th>Actions</th>
+              {(user?.role === 'ADMIN' || user?.role === 'SURGEON') && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -74,11 +78,13 @@ function OrganPage() {
                 <td>{o.organType}</td>
                 <td>{o.bloodGroup}</td>
                 <td>{o.status}</td>
-                <td>
-                  <button className="btn btn-success" onClick={() => navigate(`/matching/${o.id}`)}>
-                    Find Match
-                  </button>
-                </td>
+                {(user?.role === 'ADMIN' || user?.role === 'SURGEON') && (
+                  <td>
+                    <button className="btn btn-success" onClick={() => navigate(`/matching/${o.id}`)}>
+                      Find Match
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

@@ -33,6 +33,17 @@ public class MatchingService {
                 .filter(r -> "WAITING".equals(r.getStatus()))
                 .filter(r -> r.getOrganNeeded() != null && r.getOrganNeeded().equalsIgnoreCase(organ.getOrganType()))
                 .filter(r -> r.getBloodGroup() != null && r.getBloodGroup().equalsIgnoreCase(organ.getBloodGroup()))
+                .filter(r -> {
+                    String organHLA = organ.getTissueType();
+                    String recipientHLA = r.getTissueType();
+                    if (organHLA != null && organHLA.equalsIgnoreCase("Yes")) {
+                        return "Yes".equalsIgnoreCase(recipientHLA);
+                    }
+                    if (organHLA != null && organHLA.equalsIgnoreCase("No")) {
+                        return "No".equalsIgnoreCase(recipientHLA);
+                    }
+                    return true;
+                })
                 .sorted((r1, r2) -> {
                     // Sort by urgency score descending
                     int urgencyCompare = Integer.compare(r2.getUrgencyScore(), r1.getUrgencyScore());
