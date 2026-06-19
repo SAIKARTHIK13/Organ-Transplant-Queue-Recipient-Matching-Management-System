@@ -39,7 +39,7 @@ The application is a standard full-stack web app with two layers:
 ## Technologies
 
 - Backend
-  - Java 17
+  - Java 25
   - Spring Boot 4.0.5
   - Spring Data JPA
   - Spring Web MVC

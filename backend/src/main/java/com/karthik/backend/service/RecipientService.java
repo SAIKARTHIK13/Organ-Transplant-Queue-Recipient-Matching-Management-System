@@ -24,11 +24,19 @@ public class RecipientService {
     public Recipient updateUrgency(Long id, Integer newUrgency) {
         Recipient recipient = recipientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Recipient not found"));
+        if ("TRANSPLANTED".equalsIgnoreCase(recipient.getStatus())) {
+            throw new RuntimeException("Cannot update data for a transplanted patient");
+        }
         recipient.setUrgencyScore(newUrgency);
         return recipientRepository.save(recipient);
     }
 
     public void removeRecipient(Long id) {
+        Recipient recipient = recipientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recipient not found"));
+        if ("TRANSPLANTED".equalsIgnoreCase(recipient.getStatus())) {
+            throw new RuntimeException("Cannot remove data for a transplanted patient");
+        }
         recipientRepository.deleteById(id);
     }
 }

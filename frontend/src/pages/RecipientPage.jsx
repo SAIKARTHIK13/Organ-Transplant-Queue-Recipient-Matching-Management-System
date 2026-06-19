@@ -48,6 +48,10 @@ function RecipientPage() {
     }
   };
 
+  const isTransplanted = (status) => {
+    return typeof status === 'string' && status.toLowerCase() === 'transplanted';
+  };
+
   return (
     <div>
       <h2>Manage Recipients</h2>
@@ -111,8 +115,12 @@ function RecipientPage() {
                 <td>{r.status}</td>
                 {(user?.role === 'ADMIN' || user?.role === 'COORDINATOR') && (
                   <td className="flex gap-1">
-                    <button className="btn" onClick={() => handleUpdateUrgency(r.id, r.urgencyScore)}>Update</button>
-                    <button className="btn btn-danger" onClick={() => handleRemove(r.id)}>Remove</button>
+                    {!isTransplanted(r.status) && (
+                      <>
+                        <button className="btn" onClick={() => handleUpdateUrgency(r.id, r.urgencyScore)}>Update</button>
+                        <button className="btn btn-danger" onClick={() => handleRemove(r.id)}>Remove</button>
+                      </>
+                    )}
                   </td>
                 )}
               </tr>

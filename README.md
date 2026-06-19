@@ -42,7 +42,7 @@ The system supports:
 ## Setup Instructions
 
 ### Prerequisites
-- Java 17
+- Java 25
 - Maven
 - Node.js + npm
 - MySQL running on `localhost:3306`
